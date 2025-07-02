@@ -26,3 +26,5 @@ INFO:     100.64.4.167:40378 - "POST /users/register HTTP/1.1" 200 OK
 INFO:     100.64.4.167:58930 - "POST /auth/token HTTP/1.1" 200 OK
 INFO:     100.64.4.167:49022 - "GET /users/me HTTP/1.1" 401 Unauthorized
 INFO:     100.64.4.167:35062 - "GET /users/me HTTP/1.1" 401 Unauthorized
+INFO:     100.64.4.167:51378 - "HEAD /openapi.json HTTP/1.1" 200 OK
+INFO:     100.64.4.167:51384 - "GET /openapi.json HTTP/1.1" 200 OK
