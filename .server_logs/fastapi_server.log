@@ -14,3 +14,10 @@ INFO:     100.64.4.167:53520 - "GET /users/me HTTP/1.1" 200 OK
 INFO:     172.17.0.1:0 - "GET /main.c038d33dc267e3dfcb9c.hot-update.json HTTP/1.1" 404 Not Found
 INFO:     100.64.4.167:51426 - "GET /users/me HTTP/1.1" 200 OK
 INFO:     100.64.4.167:51436 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     172.17.0.1:0 - "GET /main.cd0b9a64beb18eceaffb.hot-update.json HTTP/1.1" 404 Not Found
+INFO:     100.64.4.167:59870 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:59882 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:59898 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:59914 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:59930 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:59934 - "GET /users/me HTTP/1.1" 200 OK
