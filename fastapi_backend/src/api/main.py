@@ -445,6 +445,7 @@ def create_pet(
     Uploaded pet photos are stored and referenced ONLY for user-facing dashboard/listing display.
     Images are not used for processing, AI, or external integrations.
     Returns detailed error JSON in case of upload, format, permission, or server error.
+    Provides actionable error details (and tracebacks when needed) to the frontend instead of only 'Failed to fetch'.
     """
     import logging
     import traceback
@@ -478,7 +479,7 @@ def create_pet(
     except Exception as e:
         logger.error(f"Database error during pet creation: {e}\n{traceback.format_exc()}")
         db.rollback()
-        return JSONResponse(status_code=500, content={"detail": f"Failed to create pet listing: {str(e)}"})
+        return JSONResponse(status_code=500, content={"detail": f"Failed to create pet listing: {str(e)}", "trace": traceback.format_exc()})
 
     photo_urls = []
     # File upload configuration
@@ -527,9 +528,6 @@ def create_pet(
                 with open(filename, "wb") as image_file:
                     contents = file.file.read()
                     image_file.write(contents)
-                # Restrict image usage: Images are only referenced in pet dashboard/listing UI and not used for any backend/external/AI processing
-                # The image_url is set to be accessed via the /static/uploads/ endpoint ONLY
-                # Important: Do not use `photo_url` for any processing, just display
                 rel_filename = filename.replace("uploads/", "", 1) if filename.startswith("uploads/") else filename
                 photo_url = f"/static/uploads/{rel_filename}"
                 new_photo = PetPhoto(image_url=photo_url, pet_id=new_pet.id)
@@ -549,7 +547,7 @@ def create_pet(
             db.commit()
         except Exception as cleanup_exc:
             logger.error(f"Cleanup failed after upload error: {cleanup_exc}\n{traceback.format_exc()}")
-        # Improve error surfacing, include original error and traceback for debugging on frontend
+        # Return trace and actionable errors to client
         return JSONResponse(
             status_code=500,
             content={
@@ -559,7 +557,7 @@ def create_pet(
             }
         )
 
-    # Return result, including any non-blocking errors
+    # If there were any errors (even non-blocking), surface them prominently in the response.
     result = {
         "id": new_pet.id,
         "name": new_pet.name,
@@ -576,6 +574,40 @@ def create_pet(
         "upload_errors": errors if errors else None
     }
     return result
+
+# PUBLIC_INTERFACE
+@app.options("/pets/", tags=["pets"])
+def pets_options_handler():
+    """
+    CORS preflight OPTIONS handler for the /pets/ endpoint.
+    Helps diagnose CORS and allow proper surfacing of preflight issues, returning allowed methods, headers.
+    """
+    from fastapi import Response
+    # Starlette will generally add CORS headers, but we can be explicit for debugging
+    allowed_methods = "POST, OPTIONS, GET"
+    allowed_headers = "Authorization, Content-Type, X-Requested-With"
+    response = Response()
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = allowed_methods
+    response.headers["Access-Control-Allow-Headers"] = allowed_headers
+    response.status_code = 200
+    return response
+
+# PUBLIC_INTERFACE
+@app.post("/debug/pets-upload-curl", tags=["pets"])
+def debug_curl_pet_upload():
+    """
+    Returns a sample cURL command demonstrating how to POST a single-image pet upload (for debugging).
+    """
+    curl_example = (
+        "curl -X POST http://localhost:8000/pets/ "
+        "-H 'accept: application/json' "
+        "-H 'Authorization: Bearer <TOKEN>' "
+        "-F 'name=Testy' -F 'species=Dog' "
+        "-F 'breed=Pug' "
+        "-F 'files=@d3.jpg;type=image/jpeg'"
+    )
+    return {"curl": curl_example}
 
 @app.get("/pets/", tags=["pets"], response_model=List[PetOut])
 def list_pets(
