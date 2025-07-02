@@ -28,6 +28,7 @@ from sqlalchemy import (
     ForeignKey,
     Text,
     Enum as SQLAEnum,
+    text,  # Added import for SQL text construct
 )
 from sqlalchemy.orm import relationship, sessionmaker, declarative_base, Session
 from jose import JWTError, jwt  # ensure python-jose (not generic 'jose')
@@ -326,7 +327,7 @@ def db_health_check():
     """Check database connectivity."""
     try:
         db = SessionLocal()
-        db.execute("SELECT 1")
+        db.execute(text("SELECT 1"))
         db.close()
         return {"status": "ok"}
     except Exception as e:
