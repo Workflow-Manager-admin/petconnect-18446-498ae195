@@ -15,7 +15,8 @@ from fastapi import (
 )
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import (
     create_engine,
@@ -34,7 +35,6 @@ from sqlalchemy.orm import relationship, sessionmaker, declarative_base, Session
 from jose import JWTError, jwt  # ensure python-jose (not generic 'jose')
 from passlib.context import CryptContext
 from pydantic import BaseModel, EmailStr, Field
-
 import os
 
 # Ensure Python 3+
@@ -106,6 +106,7 @@ class PetPhoto(Base):
     pet_id = Column(Integer, ForeignKey("pets.id"))
     pet = relationship("Pet", back_populates="photos")
     uploaded_at = Column(DateTime, default=datetime.utcnow)
+    # Note: PetPhoto image files are strictly for display in dashboard/pet listings. No external use, AI, or processing.
 
 
 class Message(Base):
@@ -219,6 +220,8 @@ class MessageOut(BaseModel):
 # ======================
 #   APP SETUP & UTILS
 # ======================
+# (removed from here so it only appears at the top, import order fixed)
+
 app = FastAPI(
     title="PetConnect API",
     description="Backend API for Pet Adoption/Rescue Platform",
@@ -231,6 +234,7 @@ app = FastAPI(
         {"name": "admin", "description": "Admin endpoints (analytics/moderation)"},
         {"name": "files", "description": "Photo upload"},
         {"name": "health", "description": "Health check endpoints"},
+        {"name": "static", "description": "Endpoint for serving uploaded pet images for dashboard display only."},
     ],
 )
 
@@ -241,6 +245,22 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# PUBLIC_INTERFACE
+@app.get("/static/uploads/{filename:path}", tags=["static"])
+def serve_pet_image(filename: str):
+    """
+    Serve uploaded pet images for dashboard/listing display.
+    Only pet dashboard listings should use this endpoint; images are NOT used for any processing, external integrations, or AI.
+    """
+    uploads_folder = os.path.join("uploads")
+    file_path = os.path.join(uploads_folder, filename)
+    if not os.path.isfile(file_path):
+        raise HTTPException(status_code=404, detail="Image not found")
+    return FileResponse(file_path, media_type="image/jpeg")  # mime-guessing could be improved with python-magic if needed
+
+# Optionally, mount the whole 'uploads' folder for direct static serving (read-only)
+app.mount("/static/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -422,6 +442,8 @@ def create_pet(
 ):
     """
     Create new pet listing. Multi-photo upload. CAPTCHA required (stub).
+    Uploaded pet photos are stored and referenced ONLY for user-facing dashboard/listing display.
+    Images are not used for processing, AI, or external integrations.
     Returns detailed error JSON in case of upload, format, permission, or server error.
     """
     import logging
@@ -499,8 +521,11 @@ def create_pet(
                 with open(filename, "wb") as image_file:
                     contents = file.file.read()
                     image_file.write(contents)
-                # TODO: Replace below with actual Cloudinary integration
-                photo_url = f"/static/{filename}"  # Placeholder
+                # Restrict image usage: Images are only referenced in pet dashboard/listing UI and not used for any backend/external/AI processing
+                # The image_url is set to be accessed via the /static/uploads/ endpoint ONLY
+                # Important: Do not use `photo_url` for any processing, just display
+                rel_filename = filename.replace("uploads/", "", 1) if filename.startswith("uploads/") else filename
+                photo_url = f"/static/uploads/{rel_filename}"
                 new_photo = PetPhoto(image_url=photo_url, pet_id=new_pet.id)
                 db.add(new_photo)
                 photo_urls.append(photo_url)

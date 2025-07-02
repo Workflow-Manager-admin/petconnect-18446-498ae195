@@ -1,7 +1,25 @@
 /home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/pydantic/_internal/_config.py:373: UserWarning: Valid config keys have changed in V2:
 * 'orm_mode' has been renamed to 'from_attributes'
   warnings.warn(message, UserWarning)
-INFO:     Started server process [26765]
+INFO:     Started server process [27072]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:3001 (Press CTRL+C to quit)
+INFO:     100.64.4.167:48910 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:48926 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:48940 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:48942 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:59498 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:59514 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:38270 - "OPTIONS /pets/ HTTP/1.1" 200 OK
+WARNING:  File in upload is not an UploadFile instance.
+WARNING:  File in upload is not an UploadFile instance.
+INFO:     100.64.4.167:38284 - "POST /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:38300 - "OPTIONS /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:38312 - "OPTIONS /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:38328 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:38340 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:51946 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:51948 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:33418 - "OPTIONS /pets/2 HTTP/1.1" 200 OK
+INFO:     100.64.4.167:33428 - "DELETE /pets/2 HTTP/1.1" 200 OK
