@@ -447,8 +447,14 @@ def create_pet(
     Returns detailed error JSON in case of upload, format, permission, or server error.
     """
     import logging
+    import traceback
 
     logger = logging.getLogger("uvicorn.error")
+
+    # DEBUG: Log the incoming form fields for troubleshooting
+    logger.info(f"Incoming pet create request fields: "
+                f"name={name}, species={species}, breed={breed}, age={age}, "
+                f"description={description}, location_lat={location_lat}, location_lng={location_lng}, files={[f.filename for f in files] if files else files}")
 
     # Basic input check (name and species required by OpenAPI spec, but double-check)
     if not name or not species:
@@ -470,7 +476,7 @@ def create_pet(
         db.commit()
         db.refresh(new_pet)
     except Exception as e:
-        logger.error(f"Database error during pet creation: {e}")
+        logger.error(f"Database error during pet creation: {e}\n{traceback.format_exc()}")
         db.rollback()
         return JSONResponse(status_code=500, content={"detail": f"Failed to create pet listing: {str(e)}"})
 
@@ -530,20 +536,27 @@ def create_pet(
                 db.add(new_photo)
                 photo_urls.append(photo_url)
             except Exception as file_exc:
-                error = f"Error saving {file.filename}: {str(file_exc)}"
+                error = f"Error saving {file.filename}: {str(file_exc)}\n{traceback.format_exc()}"
                 logger.error(error)
                 errors.append({"file": file.filename, "error": error})
         db.commit()
     except Exception as e:
-        logger.error(f"File upload error: {e}")
+        logger.error(f"File upload error: {e}\n{traceback.format_exc()}")
         db.rollback()
         # Remove pet entry if photo upload fails (to avoid orphan entry)
-        db.delete(new_pet)
-        db.commit()
+        try:
+            db.delete(new_pet)
+            db.commit()
+        except Exception as cleanup_exc:
+            logger.error(f"Cleanup failed after upload error: {cleanup_exc}\n{traceback.format_exc()}")
+        # Improve error surfacing, include original error and traceback for debugging on frontend
         return JSONResponse(
             status_code=500,
-            content={"detail": "File upload failure. One or more errors occurred.",
-                     "errors": errors or str(e)}
+            content={
+                "detail": "File upload failure. One or more errors occurred.",
+                "errors": errors if errors else str(e),
+                "trace": traceback.format_exc()
+            }
         )
 
     # Return result, including any non-blocking errors
