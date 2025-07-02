@@ -889,11 +889,31 @@ app.router.lifespan_context = lifespan
 #      RUN INSTRUCTIONS
 # ===============================
 """
-To run: 
-uvicorn src.api.main:app --reload
+To run backend locally on port 8000 (default FastAPI/uvicorn):
+uvicorn src.api.main:app --reload --host 0.0.0.0 --port 8000
 
 Serving static / uploaded photos is left as an exercise;
 Map integration expects storing lat/lng on pets;
 Image uploads handled as dumb files - replace with cloud storage in production.
 Add input validation and CAPTCHA integration for production security.
+
+# Troubleshooting "Failed to fetch" on /users/register
+This API will:
+- Add all CORS headers for open cross-origin requests (*)
+- Return error JSON on registration/init errors, not generic network failures
+- Expose tracebacks for debugging if the backend fails
+
+Check that:
+- Your frontend is POSTing to the right host:port/path: (e.g., http://localhost:8000/users/register)
+- FastAPI is running on correct host/port (0.0.0.0:8000 for Docker, localhost:8000 for local dev)
+- If you get "Failed to fetch", check:
+    - Backend logs for any crash or stack trace on POST to /users/register
+    - Browser Network tab for CORS error details (preflight denied, etc)
+    - JSON returned on registration errors (should not be empty)
+    - .env or config file is pointing frontend to backend host:port as above
+
+If backend appears healthy:
+- Try posting to /health/db to confirm DB connection
+
+If all appears correct, check browser console for frontend-side issues (network block, HTTPS/HTTP mismatch, etc).
 """
