@@ -1,6 +1,7 @@
 from typing import List, Optional
 from enum import Enum
 from datetime import datetime, timedelta
+from contextlib import asynccontextmanager
 
 from fastapi import (
     FastAPI,
@@ -33,9 +34,11 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel, EmailStr, Field
 
+import os
+
 # Constants and Config
-DATABASE_URL = "sqlite:///./petconnect.db"
-JWT_SECRET_KEY = "changeme_supersecret"  # In production, use an environment variable
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./petconnect.db")
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "changeme_supersecret")  # In production, use an environment variable
 JWT_ALGORITHM = "HS256"
 JWT_ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
@@ -115,7 +118,7 @@ class Message(Base):
 class AdminAnalytics(Base):
     __tablename__ = "admin_analytics"
     id = Column(Integer, primary_key=True)
-    key = Column(String, nullable=False)
+    key = Column(String, nullable=False, unique=True)
     value = Column(String, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)
 
@@ -236,7 +239,7 @@ app.add_middleware(
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
 def get_db():
     db = SessionLocal()
@@ -319,6 +322,7 @@ def db_health_check():
     try:
         db = SessionLocal()
         db.execute("SELECT 1")
+        db.close()
         return {"status": "ok"}
     except Exception as e:
         return JSONResponse(status_code=503, content={"status": "unhealthy", "error": str(e)})
@@ -655,9 +659,10 @@ def setup_google_oauth():
 # ===============================
 #       INIT ON FIRST RUN
 # ===============================
-def create_initial_db():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Run at startup
     Base.metadata.create_all(bind=engine)
-    # Create a default admin if none exists
     db = SessionLocal()
     admin_email = "admin@petconnect.local"
     if not db.query(User).filter(User.email == admin_email).first():
@@ -670,8 +675,10 @@ def create_initial_db():
         db.add(admin)
         db.commit()
     db.close()
+    yield
+    # Run at shutdown, nothing to do
 
-create_initial_db()
+app.router.lifespan_context = lifespan
 
 # ===============================
 #      RUN INSTRUCTIONS
