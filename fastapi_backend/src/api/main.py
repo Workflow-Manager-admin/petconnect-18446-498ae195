@@ -453,31 +453,61 @@ def create_pet(
         return JSONResponse(status_code=500, content={"detail": f"Failed to create pet listing: {str(e)}"})
 
     photo_urls = []
+    # File upload configuration
+    MAX_FILE_SIZE_MB = 5  # Max file size per image (in MB)
+    MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024
+    MAX_IMAGE_FILES = 10  # Limit number of images per pet listing
+
+    errors = []
     # Validate type of files: must be a list, even if empty (bad multipart can send None or one UploadFile)
     if files is None:
         files = []
     elif not isinstance(files, list):
         files = [files]
+    if len(files) > MAX_IMAGE_FILES:
+        logger.warning(f"Too many photo files: received {len(files)} (max {MAX_IMAGE_FILES})")
+        return JSONResponse(
+            status_code=400,
+            content={"detail": f"Too many photos in upload: limit {MAX_IMAGE_FILES}. Received {len(files)}"}
+        )
 
     try:
         for file in files:
             if not isinstance(file, UploadFile):
-                logger.warning("File in upload is not UploadFile instance.")
+                error = "File in upload is not an UploadFile instance."
+                logger.warning(error)
+                errors.append({"file": None, "error": error})
                 continue
             if not (file.filename and file.content_type and file.content_type.startswith("image/")):
-                logger.warning(f"File {file.filename} skipped, not an image.")
+                error = f"File {file.filename} skipped, not a valid image format."
+                logger.warning(error)
+                errors.append({"file": file.filename, "error": error})
+                continue
+            # Check file size (peek ahead, seek back)
+            file.file.seek(0, 2)  # go to end
+            file_size = file.file.tell()
+            file.file.seek(0)  # reset
+            if file_size > MAX_FILE_SIZE:
+                error = f"File {file.filename} too large ({file_size // 1024} KB). Limit is {MAX_FILE_SIZE_MB} MB."
+                logger.warning(error)
+                errors.append({"file": file.filename, "error": error})
                 continue
             # Create uploads directory if missing
             os.makedirs("uploads", exist_ok=True)
             filename = f"uploads/{datetime.utcnow().timestamp()}_{file.filename}"
-            with open(filename, "wb") as image_file:
-                contents = file.file.read()
-                image_file.write(contents)
-            # TODO: Replace below with actual Cloudinary integration
-            photo_url = f"/static/{filename}"  # Placeholder
-            new_photo = PetPhoto(image_url=photo_url, pet_id=new_pet.id)
-            db.add(new_photo)
-            photo_urls.append(photo_url)
+            try:
+                with open(filename, "wb") as image_file:
+                    contents = file.file.read()
+                    image_file.write(contents)
+                # TODO: Replace below with actual Cloudinary integration
+                photo_url = f"/static/{filename}"  # Placeholder
+                new_photo = PetPhoto(image_url=photo_url, pet_id=new_pet.id)
+                db.add(new_photo)
+                photo_urls.append(photo_url)
+            except Exception as file_exc:
+                error = f"Error saving {file.filename}: {str(file_exc)}"
+                logger.error(error)
+                errors.append({"file": file.filename, "error": error})
         db.commit()
     except Exception as e:
         logger.error(f"File upload error: {e}")
@@ -485,8 +515,13 @@ def create_pet(
         # Remove pet entry if photo upload fails (to avoid orphan entry)
         db.delete(new_pet)
         db.commit()
-        return JSONResponse(status_code=500, content={"detail": f"File upload failure. Error: {str(e)}"})
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "File upload failure. One or more errors occurred.",
+                     "errors": errors or str(e)}
+        )
 
+    # Return result, including any non-blocking errors
     result = {
         "id": new_pet.id,
         "name": new_pet.name,
@@ -500,6 +535,7 @@ def create_pet(
         "owner_id": new_pet.owner_id,
         "photos": photo_urls,
         "created_at": new_pet.created_at,
+        "upload_errors": errors if errors else None
     }
     return result
 
