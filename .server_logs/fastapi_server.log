@@ -1,28 +1,28 @@
 /home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/pydantic/_internal/_config.py:373: UserWarning: Valid config keys have changed in V2:
 * 'orm_mode' has been renamed to 'from_attributes'
   warnings.warn(message, UserWarning)
-INFO:     Started server process [7262]
+INFO:     Started server process [10661]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:3001 (Press CTRL+C to quit)
-INFO:     100.64.4.167:44718 - "HEAD /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:44760 - "HEAD /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:44732 - "HEAD /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:44748 - "HEAD /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:44766 - "HEAD /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:44772 - "HEAD /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:44786 - "GET /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:44800 - "GET /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:44814 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     100.64.4.167:44822 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     100.64.4.167:37738 - "GET /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:37746 - "GET /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:37770 - "HEAD /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:37754 - "HEAD /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:37784 - "GET /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:37794 - "GET /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:37810 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     100.64.4.167:37820 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     100.64.4.167:51958 - "GET /health/db HTTP/1.1" 200 OK
+INFO:     100.64.4.167:42214 - "GET /users/me HTTP/1.1" 401 Unauthorized
+INFO:     100.64.4.167:47540 - "POST /users/register HTTP/1.1" 409 Conflict
 (trapped) error reading bcrypt version
 Traceback (most recent call last):
   File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
     version = _bcrypt.__about__.__version__
               ^^^^^^^^^^^^^^^^^
 AttributeError: module 'bcrypt' has no attribute '__about__'
-INFO:     100.64.4.167:54352 - "POST /users/register HTTP/1.1" 200 OK
-INFO:     100.64.4.167:33252 - "POST /auth/token HTTP/1.1" 401 Unauthorized
-INFO:     100.64.4.167:34104 - "POST /auth/token HTTP/1.1" 200 OK
-INFO:     100.64.4.167:44128 - "GET /auth/google_oauth HTTP/1.1" 200 OK
-INFO:     100.64.4.167:48734 - "GET /health/db HTTP/1.1" 503 Service Unavailable
+INFO:     100.64.4.167:40378 - "POST /users/register HTTP/1.1" 200 OK
+INFO:     100.64.4.167:58930 - "POST /auth/token HTTP/1.1" 200 OK
+INFO:     100.64.4.167:49022 - "GET /users/me HTTP/1.1" 401 Unauthorized
+INFO:     100.64.4.167:35062 - "GET /users/me HTTP/1.1" 401 Unauthorized

@@ -1,0 +1,583 @@
+openapi: 3.0.3
+info:
+  title: PetConnect API
+  version: "1.0.0"
+  description: |
+    REST API for PetConnect: a web platform to streamline pet adoption and rescue. 
+    Covers user registration/auth, pet management, user messaging, and admin operations.
+
+servers:
+  - url: /api
+
+tags:
+  - name: auth
+    description: Authentication and user registration
+  - name: users
+    description: User management and role updates
+  - name: pets
+    description: Pet listings management
+  - name: messages
+    description: Messaging endpoints
+  - name: admin
+    description: Admin endpoints (analytics, moderation)
+  - name: health
+    description: Health check endpoints
+
+paths:
+  /health/db:
+    get:
+      summary: Database health check
+      tags: [health]
+      responses:
+        '200':
+          description: Database connection is healthy.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+        '503':
+          description: Database unhealthy or unreachable.
+
+  /users/register:
+    post:
+      summary: User registration
+      description: Register a new user account. Email must be unique. Password min 6 chars. CAPTCHA not implemented in MVP.
+      tags: [auth]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+        required: true
+      responses:
+        '200':
+          description: New user account created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOut'
+        '409':
+          description: Email already registered
+
+  /auth/token:
+    post:
+      summary: JWT login
+      description: Obtain JWT access token via email and password (OAuth2 password flow).
+      tags: [auth]
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+              required:
+                - username
+                - password
+        required: true
+      responses:
+        '200':
+          description: Returns access token (JWT)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '401':
+          description: Incorrect email or password
+
+  /users/me:
+    get:
+      summary: Get logged-in user info
+      description: Returns the currently logged-in user's profile info.
+      tags: [users]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User profile details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOut'
+        '401':
+          description: Missing or invalid token
+
+  /users/{user_id}/role:
+    put:
+      summary: Change user role
+      description: Admin-only. Updates the role of a specified user.
+      tags: [users]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+          description: The user ID to update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_role:
+                  $ref: '#/components/schemas/UserRole'
+              required: [new_role]
+        required: true
+      responses:
+        '200':
+          description: User role updated
+        '403':
+          description: Only admin may perform this operation
+        '404':
+          description: User not found
+
+  /pets/:
+    post:
+      summary: Create new pet listing
+      description: |
+        Creates a new pet listing with uploaded images.
+        Only rescuers or admins may create listings.
+        Multi-photo upload is supported.
+        CAPTCHA is not enforced in MVP.
+      tags: [pets]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                species:
+                  type: string
+                breed:
+                  type: string
+                age:
+                  type: number
+                  format: float
+                description:
+                  type: string
+                location_lat:
+                  type: number
+                  format: float
+                location_lng:
+                  type: number
+                  format: float
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: Created pet listing details (with photo URLs)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetOut'
+        '403':
+          description: Only rescuers or admins may create listings
+
+    get:
+      summary: List/search pets
+      description: List all adoptable pets, optionally filtered by species, breed, age, or availability.
+      tags: [pets]
+      parameters:
+        - in: query
+          name: species
+          schema:
+            type: string
+        - in: query
+          name: breed
+          schema:
+            type: string
+        - in: query
+          name: age
+          schema:
+            type: number
+            format: float
+        - in: query
+          name: available
+          schema:
+            type: boolean
+          description: Only show available pets if set to true (default)
+      responses:
+        '200':
+          description: List of pet listings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PetOut'
+
+  /pets/{pet_id}:
+    get:
+      summary: Get pet details by ID
+      tags: [pets]
+      parameters:
+        - in: path
+          name: pet_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Pet listing details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetOut'
+        '404':
+          description: Pet not found
+
+    put:
+      summary: Update pet listing
+      description: Only owner or admin can update pet listing
+      tags: [pets]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: pet_id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PetUpdate'
+        required: true
+      responses:
+        '200':
+          description: Updated pet details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PetOut'
+        '403':
+          description: Not allowed (only owner or admin)
+        '404':
+          description: Pet not found
+
+    delete:
+      summary: Delete pet listing
+      description: Allowed for pet owner or admin.
+      tags: [pets]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: pet_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Pet deleted
+        '403':
+          description: Not allowed (only owner or admin)
+        '404':
+          description: Pet not found
+
+  /pets/{pet_id}/location:
+    put:
+      summary: Update pet location
+      description: Owner or admin can update a pet's location info (lat/lng).
+      security:
+        - bearerAuth: []
+      tags: [pets]
+      parameters:
+        - in: path
+          name: pet_id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                location_lat:
+                  type: number
+                  format: float
+                location_lng:
+                  type: number
+                  format: float
+              required: [location_lat, location_lng]
+      responses:
+        '200':
+          description: Pet location updated
+        '403':
+          description: Not allowed (only owner or admin)
+        '404':
+          description: Pet not found
+
+  /messages/send:
+    post:
+      summary: Send message
+      description: Send a message to another user (adoption/interest inquiry).
+      tags: [messages]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                receiver_id:
+                  type: integer
+                content:
+                  type: string
+                  minLength: 1
+              required: [receiver_id, content]
+      responses:
+        '200':
+          description: Message sent and echoed back
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageOut'
+        '404':
+          description: Receiver not found
+
+  /messages/inbox:
+    get:
+      summary: Get inbox messages
+      description: Retrieve all messages received by the user (inbox).
+      tags: [messages]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of received messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageOut'
+
+  /messages/flagged:
+    get:
+      summary: Get flagged messages (admin only)
+      tags: [admin]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of flagged messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MessageOut'
+        '403':
+          description: Only admin may access this route
+
+  /admin/analytics:
+    get:
+      summary: Get analytics
+      description: View summary analytics (admin-only)
+      tags: [admin]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Analytics summary
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users_count:
+                    type: integer
+                  pets_count:
+                    type: integer
+                  adoptions:
+                    type: integer
+        '403':
+          description: Only admin may access this route
+
+  /admin/flag_content:
+    post:
+      summary: Flag content for admin review
+      description: Any user may flag a pet/user/message for inappropriate content.
+      tags: [admin]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: Content type (pet, message, user)
+                item_id:
+                  type: integer
+                  description: ID of the item to flag
+                flagged_reason:
+                  type: string
+      responses:
+        '200':
+          description: Flag submitted
+
+  /admin/flagged:
+    get:
+      summary: List flagged content
+      description: Returns all unresolved flagged content. Admin only.
+      tags: [admin]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of flagged items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '403':
+          description: Only admin may access this route
+
+  /auth/google_oauth:
+    get:
+      summary: Google OAuth setup (stub)
+      description: |
+        Placeholder endpoint for Google OAuth integration, not implemented in MVP.
+      tags: [auth]
+      responses:
+        '200':
+          description: Always returns not implemented message
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Token:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+
+    UserRole:
+      type: string
+      enum: [adopter, rescuer, admin]
+
+    UserCreate:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        full_name:
+          type: string
+        password:
+          type: string
+          minLength: 6
+        role:
+          $ref: '#/components/schemas/UserRole'
+      required: [email, password]
+
+    UserOut:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        full_name:
+          type: string
+        role:
+          $ref: '#/components/schemas/UserRole'
+
+    PetBase:
+      type: object
+      properties:
+        name:
+          type: string
+        species:
+          type: string
+        breed:
+          type: string
+        age:
+          type: number
+          format: float
+        description:
+          type: string
+        location_lat:
+          type: number
+        location_lng:
+          type: number
+
+    PetUpdate:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - type: object
+          properties:
+            available:
+              type: boolean
+
+    PetOut:
+      allOf:
+        - $ref: '#/components/schemas/PetBase'
+        - type: object
+          properties:
+            id:
+              type: integer
+            available:
+              type: boolean
+            photos:
+              type: array
+              items:
+                type: string
+            owner_id:
+              type: integer
+            created_at:
+              type: string
+              format: date-time
+
+    MessageOut:
+      type: object
+      properties:
+        id:
+          type: integer
+        sender_id:
+          type: integer
+        receiver_id:
+          type: integer
+        content:
+          type: string
+        sent_at:
+          type: string
+          format: date-time
