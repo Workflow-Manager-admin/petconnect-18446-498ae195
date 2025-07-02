@@ -49,6 +49,6 @@ Traceback (most recent call last):
   File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
   File "<frozen importlib._bootstrap_external>", line 995, in exec_module
   File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
-  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/src/api/main.py", line 19, in <module>
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/src/api/main.py", line 20, in <module>
     from sqlalchemy import (
 ModuleNotFoundError: No module named 'sqlalchemy'

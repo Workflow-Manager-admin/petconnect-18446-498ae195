@@ -30,11 +30,16 @@ from sqlalchemy import (
     Enum as SQLAEnum,
 )
 from sqlalchemy.orm import relationship, sessionmaker, declarative_base, Session
-from jose import JWTError, jwt
+from jose import JWTError, jwt  # ensure python-jose (not generic 'jose')
 from passlib.context import CryptContext
 from pydantic import BaseModel, EmailStr, Field
 
 import os
+
+# Ensure Python 3+
+import sys
+if sys.version_info < (3, 7):
+    raise RuntimeError("This application requires Python 3.7 or newer.")
 
 # Constants and Config
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./petconnect.db")
@@ -325,7 +330,8 @@ def db_health_check():
         db.close()
         return {"status": "ok"}
     except Exception as e:
-        return JSONResponse(status_code=503, content={"status": "unhealthy", "error": str(e)})
+        import traceback
+        return JSONResponse(status_code=503, content={"status": "unhealthy", "error": str(e), "trace": traceback.format_exc()})
 
 # -------- AUTH --------
 @app.post("/users/register", tags=["auth"], summary="User registration", response_model=UserOut)
