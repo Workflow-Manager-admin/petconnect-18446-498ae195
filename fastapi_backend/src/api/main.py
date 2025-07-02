@@ -402,10 +402,15 @@ def update_user_role(
     return {"message": "User role updated", "user_id": user_id, "new_role": new_role}
 
 # --- Pets CRUD ---
-@app.post("/pets/", tags=["pets"], response_model=PetOut)
+@app.post("/pets/", tags=["pets"], response_model=PetOut, responses={
+    400: {"description": "Invalid request (missing data or file upload)"},
+    401: {"description": "Unauthorized"},
+    403: {"description": "Only rescuers or admins may create listings."},
+    500: {"description": "Internal server error, including file upload failures"},
+})
 def create_pet(
-    name: str = Form(...),
-    species: str = Form(...),
+    name: str = Form(..., description="Pet's name"),
+    species: str = Form(..., description="Species"),
     breed: str = Form(""),
     age: float = Form(None),
     description: str = Form(""),
@@ -415,47 +420,88 @@ def create_pet(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role([UserRole.RESCUER, UserRole.ADMIN])),
 ):
-    """Create new pet listing. Multi-photo upload. CAPTCHA required (stub)."""
-    new_pet = Pet(
-        name=name,
-        species=species,
-        breed=breed,
-        age=age,
-        description=description,
-        location_lat=location_lat,
-        location_lng=location_lng,
-        owner_id=current_user.id,
-    )
-    db.add(new_pet)
-    db.commit()
-    db.refresh(new_pet)
+    """
+    Create new pet listing. Multi-photo upload. CAPTCHA required (stub).
+    Returns detailed error JSON in case of upload, format, permission, or server error.
+    """
+    import logging
+
+    logger = logging.getLogger("uvicorn.error")
+
+    # Basic input check (name and species required by OpenAPI spec, but double-check)
+    if not name or not species:
+        logger.error("Missing required fields in pet create request: name or species.")
+        return JSONResponse(status_code=400, content={"detail": "Name and species are required."})
+
+    try:
+        new_pet = Pet(
+            name=name,
+            species=species,
+            breed=breed,
+            age=age,
+            description=description,
+            location_lat=location_lat,
+            location_lng=location_lng,
+            owner_id=current_user.id,
+        )
+        db.add(new_pet)
+        db.commit()
+        db.refresh(new_pet)
+    except Exception as e:
+        logger.error(f"Database error during pet creation: {e}")
+        db.rollback()
+        return JSONResponse(status_code=500, content={"detail": f"Failed to create pet listing: {str(e)}"})
+
     photo_urls = []
-    # Handle uploads (stub for Cloudinary URL; SAVES locally and generates dummy URL for now)
-    for file in files:
-        filename = f"uploads/{datetime.utcnow().timestamp()}_{file.filename}"
-        with open(filename, "wb") as image_file:
-            contents = file.file.read()
-            image_file.write(contents)
-        # TODO: Replace below with actual Cloudinary integration
-        photo_url = f"/static/{filename}"  # Placeholder
-        new_photo = PetPhoto(image_url=photo_url, pet_id=new_pet.id)
-        db.add(new_photo)
-        photo_urls.append(photo_url)
-    db.commit()
-    return PetOut(
-        id=new_pet.id,
-        name=new_pet.name,
-        species=new_pet.species,
-        breed=new_pet.breed,
-        age=new_pet.age,
-        available=new_pet.available,
-        description=new_pet.description,
-        location_lat=new_pet.location_lat,
-        location_lng=new_pet.location_lng,
-        owner_id=new_pet.owner_id,
-        photos=photo_urls,
-        created_at=new_pet.created_at,
-    )
+    # Validate type of files: must be a list, even if empty (bad multipart can send None or one UploadFile)
+    if files is None:
+        files = []
+    elif not isinstance(files, list):
+        files = [files]
+
+    try:
+        for file in files:
+            if not isinstance(file, UploadFile):
+                logger.warning("File in upload is not UploadFile instance.")
+                continue
+            if not (file.filename and file.content_type and file.content_type.startswith("image/")):
+                logger.warning(f"File {file.filename} skipped, not an image.")
+                continue
+            # Create uploads directory if missing
+            os.makedirs("uploads", exist_ok=True)
+            filename = f"uploads/{datetime.utcnow().timestamp()}_{file.filename}"
+            with open(filename, "wb") as image_file:
+                contents = file.file.read()
+                image_file.write(contents)
+            # TODO: Replace below with actual Cloudinary integration
+            photo_url = f"/static/{filename}"  # Placeholder
+            new_photo = PetPhoto(image_url=photo_url, pet_id=new_pet.id)
+            db.add(new_photo)
+            photo_urls.append(photo_url)
+        db.commit()
+    except Exception as e:
+        logger.error(f"File upload error: {e}")
+        db.rollback()
+        # Remove pet entry if photo upload fails (to avoid orphan entry)
+        db.delete(new_pet)
+        db.commit()
+        return JSONResponse(status_code=500, content={"detail": f"File upload failure. Error: {str(e)}"})
+
+    result = {
+        "id": new_pet.id,
+        "name": new_pet.name,
+        "species": new_pet.species,
+        "breed": new_pet.breed,
+        "age": new_pet.age,
+        "available": new_pet.available,
+        "description": new_pet.description,
+        "location_lat": new_pet.location_lat,
+        "location_lng": new_pet.location_lng,
+        "owner_id": new_pet.owner_id,
+        "photos": photo_urls,
+        "created_at": new_pet.created_at,
+    }
+    return result
 
 @app.get("/pets/", tags=["pets"], response_model=List[PetOut])
 def list_pets(

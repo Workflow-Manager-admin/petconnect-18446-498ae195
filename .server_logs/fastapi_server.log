@@ -1,84 +1,82 @@
 /home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/pydantic/_internal/_config.py:373: UserWarning: Valid config keys have changed in V2:
 * 'orm_mode' has been renamed to 'from_attributes'
   warnings.warn(message, UserWarning)
-INFO:     Started server process [10661]
+INFO:     Started server process [25697]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:3001 (Press CTRL+C to quit)
-INFO:     100.64.4.167:37738 - "GET /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:37746 - "GET /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:37770 - "HEAD /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:37754 - "HEAD /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:37784 - "GET /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:37794 - "GET /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:37810 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     100.64.4.167:37820 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     100.64.4.167:51958 - "GET /health/db HTTP/1.1" 200 OK
-INFO:     100.64.4.167:42214 - "GET /users/me HTTP/1.1" 401 Unauthorized
-INFO:     100.64.4.167:47540 - "POST /users/register HTTP/1.1" 409 Conflict
+INFO:     100.64.4.167:41344 - "POST /users/register HTTP/1.1" 409 Conflict
 (trapped) error reading bcrypt version
 Traceback (most recent call last):
   File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
     version = _bcrypt.__about__.__version__
               ^^^^^^^^^^^^^^^^^
 AttributeError: module 'bcrypt' has no attribute '__about__'
-INFO:     100.64.4.167:40378 - "POST /users/register HTTP/1.1" 200 OK
-INFO:     100.64.4.167:58930 - "POST /auth/token HTTP/1.1" 200 OK
-INFO:     100.64.4.167:49022 - "GET /users/me HTTP/1.1" 401 Unauthorized
-INFO:     100.64.4.167:35062 - "GET /users/me HTTP/1.1" 401 Unauthorized
-INFO:     100.64.4.167:51378 - "HEAD /openapi.json HTTP/1.1" 200 OK
-INFO:     100.64.4.167:51384 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     100.64.4.167:46508 - "HEAD /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:46524 - "HEAD /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:46528 - "HEAD /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:46538 - "HEAD /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:46548 - "HEAD /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:46546 - "HEAD /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:38166 - "GET /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:38180 - "GET /docs HTTP/1.1" 200 OK
-INFO:     100.64.4.167:38182 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     100.64.4.167:38194 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     100.64.4.167:53638 - "OPTIONS /users/register HTTP/1.1" 200 OK
-INFO:     100.64.4.167:53652 - "POST /users/register HTTP/1.1" 200 OK
-INFO:     100.64.4.167:53662 - "POST /auth/token HTTP/1.1" 200 OK
-INFO:     100.64.4.167:53674 - "OPTIONS /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:53680 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:49116 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:49130 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:58160 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:58170 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:58176 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:58180 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:56682 - "OPTIONS /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:56690 - "OPTIONS /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:56698 - "GET /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:56710 - "GET /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:33694 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:33710 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:33714 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:33720 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:33730 - "GET /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:33746 - "GET /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:34338 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:34344 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:34356 - "GET /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:34372 - "GET /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:60606 - "OPTIONS /auth/token HTTP/1.1" 200 OK
-INFO:     100.64.4.167:60622 - "POST /auth/token HTTP/1.1" 200 OK
-INFO:     100.64.4.167:60626 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:59296 - "OPTIONS /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:59304 - "POST /pets/ HTTP/1.1" 403 Forbidden
-INFO:     100.64.4.167:43196 - "GET /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:43204 - "GET /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:43218 - "GET /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:49532 - "GET /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:49538 - "GET /pets/?breed=pom HTTP/1.1" 200 OK
-INFO:     100.64.4.167:40024 - "GET /pets/?breed=pomer HTTP/1.1" 200 OK
-INFO:     100.64.4.167:40032 - "GET /pets/?breed=pomeri HTTP/1.1" 200 OK
-INFO:     100.64.4.167:40042 - "GET /pets/?breed=pomeria HTTP/1.1" 200 OK
-INFO:     100.64.4.167:36700 - "GET /pets/?breed=pomerian HTTP/1.1" 200 OK
-INFO:     100.64.4.167:32862 - "POST /pets/ HTTP/1.1" 401 Unauthorized
-INFO:     100.64.4.167:48416 - "GET /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:48424 - "GET /pets/ HTTP/1.1" 200 OK
-INFO:     100.64.4.167:45360 - "OPTIONS /users/register HTTP/1.1" 200 OK
-INFO:     100.64.4.167:45362 - "POST /users/register HTTP/1.1" 409 Conflict
+INFO:     100.64.4.167:37492 - "POST /users/register HTTP/1.1" 200 OK
+INFO:     100.64.4.167:37504 - "POST /auth/token HTTP/1.1" 200 OK
+INFO:     100.64.4.167:37510 - "OPTIONS /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:45566 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:46000 - "POST /pets/ HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/applications.py", line 112, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/fastapi/routing.py", line 214, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/starlette/concurrency.py", line 37, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 2470, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 967, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/src/api/main.py", line 436, in create_pet
+    with open(filename, "wb") as image_file:
+         ^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'uploads/1751440228.746055_d1.jpg'
