@@ -357,35 +357,66 @@ def db_health_check():
 # -------- AUTH --------
 @app.post("/users/register", tags=["auth"], summary="User registration", response_model=UserOut)
 def register_user(user: UserCreate = Body(...), db: Session = Depends(get_db)):
-    """Register a new user (with input validation). Captcha required (stub).
+    """
+    Register a new user (with input validation). Captcha required (stub).
 
     Handles unique email constraint violations gracefully and returns
     friendly errors if email is already registered.
+    Surfaces detailed errors to client on server issues to avoid generic "failed to fetch".
     """
     from sqlalchemy.exc import IntegrityError
+    import logging
+    import traceback
 
-    # CAPTCHA check could go here (stub)
-    if db.query(User).filter(User.email == user.email).first():
-        raise HTTPException(status_code=409, detail="Email already registered")
-    new_user = User(
-        email=user.email,
-        full_name=user.full_name,
-        hashed_password=get_password_hash(user.password),
-        role=user.role,
-    )
-    db.add(new_user)
+    logger = logging.getLogger("uvicorn.error")
+
     try:
+        # CAPTCHA check could go here (stub)
+        if db.query(User).filter(User.email == user.email).first():
+            raise HTTPException(status_code=409, detail="Email already registered")
+        new_user = User(
+            email=user.email,
+            full_name=user.full_name,
+            hashed_password=get_password_hash(user.password),
+            role=user.role,
+        )
+        db.add(new_user)
         db.commit()
         db.refresh(new_user)
     except IntegrityError:
         db.rollback()
-        # Detect specifically unique constraint violation for email field
-        # Optionally, you can examine e.orig for DB-specific error codes/messages
+        logger.error("IntegrityError occurred during registration", exc_info=True)
         raise HTTPException(status_code=409, detail="Email already registered")
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
+        logger.error(f"Registration failed: {e}\n{traceback.format_exc()}")
+        # Surface error details for easier frontend debugging
+        from fastapi.responses import JSONResponse
+        return JSONResponse(
+            status_code=500,
+            content={
+                "detail": f"Registration failed: {str(e)}",
+                "trace": traceback.format_exc()
+            }
+        )
     return new_user
+
+# PUBLIC_INTERFACE
+@app.options("/users/register", tags=["auth"])
+def users_register_options_handler():
+    """
+    CORS preflight OPTIONS handler for the /users/register endpoint.
+    Helps browsers determine available methods/headers and surface CORS issues instead of generic network errors.
+    """
+    from fastapi import Response
+    allowed_methods = "POST, OPTIONS"
+    allowed_headers = "Authorization, Content-Type, X-Requested-With"
+    response = Response()
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = allowed_methods
+    response.headers["Access-Control-Allow-Headers"] = allowed_headers
+    response.status_code = 200
+    return response
 
 @app.post("/auth/token", tags=["auth"], summary="JWT login", response_model=Token)
 def login_for_access_token(
