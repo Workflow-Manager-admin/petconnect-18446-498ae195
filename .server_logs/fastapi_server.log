@@ -38,3 +38,10 @@ INFO:     100.64.4.167:38166 - "GET /docs HTTP/1.1" 200 OK
 INFO:     100.64.4.167:38180 - "GET /docs HTTP/1.1" 200 OK
 INFO:     100.64.4.167:38182 - "GET /openapi.json HTTP/1.1" 200 OK
 INFO:     100.64.4.167:38194 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     100.64.4.167:53638 - "OPTIONS /users/register HTTP/1.1" 200 OK
+INFO:     100.64.4.167:53652 - "POST /users/register HTTP/1.1" 200 OK
+INFO:     100.64.4.167:53662 - "POST /auth/token HTTP/1.1" 200 OK
+INFO:     100.64.4.167:53674 - "OPTIONS /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:53680 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:49116 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:49130 - "GET /users/me HTTP/1.1" 200 OK
