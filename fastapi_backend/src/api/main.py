@@ -337,7 +337,13 @@ def db_health_check():
 # -------- AUTH --------
 @app.post("/users/register", tags=["auth"], summary="User registration", response_model=UserOut)
 def register_user(user: UserCreate = Body(...), db: Session = Depends(get_db)):
-    """Register a new user (with input validation). Captcha required (stub)."""
+    """Register a new user (with input validation). Captcha required (stub).
+
+    Handles unique email constraint violations gracefully and returns
+    friendly errors if email is already registered.
+    """
+    from sqlalchemy.exc import IntegrityError
+
     # CAPTCHA check could go here (stub)
     if db.query(User).filter(User.email == user.email).first():
         raise HTTPException(status_code=409, detail="Email already registered")
@@ -348,8 +354,17 @@ def register_user(user: UserCreate = Body(...), db: Session = Depends(get_db)):
         role=user.role,
     )
     db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+    try:
+        db.commit()
+        db.refresh(new_user)
+    except IntegrityError:
+        db.rollback()
+        # Detect specifically unique constraint violation for email field
+        # Optionally, you can examine e.orig for DB-specific error codes/messages
+        raise HTTPException(status_code=409, detail="Email already registered")
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
     return new_user
 
 @app.post("/auth/token", tags=["auth"], summary="JWT login", response_model=Token)
