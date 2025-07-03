@@ -26,3 +26,17 @@ INFO:     100.64.4.167:60168 - "GET /docs HTTP/1.1" 200 OK
 INFO:     100.64.4.167:60180 - "GET /docs HTTP/1.1" 200 OK
 INFO:     100.64.4.167:60192 - "GET /openapi.json HTTP/1.1" 200 OK
 INFO:     100.64.4.167:60202 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     172.17.0.1:0 - "GET /main.f87061ba58bc8f154eec.hot-update.json HTTP/1.1" 404 Not Found
+INFO:     100.64.4.167:45334 - "OPTIONS /users/register HTTP/1.1" 200 OK
+INFO:     100.64.4.167:45340 - "POST /users/register HTTP/1.1" 200 OK
+INFO:     100.64.4.167:45346 - "POST /auth/token HTTP/1.1" 200 OK
+INFO:     100.64.4.167:45352 - "OPTIONS /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:45368 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:58842 - "OPTIONS /pets/ HTTP/1.1" 200 OK
+INFO:     Incoming pet create request fields: name=Shiro, species=Dog, breed=Shitzu, age=3.0, description=whitish brown, hyper active, good with kid, location_lat=34.67, location_lng=-34.67, files=['d3.jpg']
+WARNING:  File in upload is not an UploadFile instance.
+INFO:     100.64.4.167:58844 - "POST /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:54776 - "OPTIONS /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:54774 - "OPTIONS /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:54788 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:54790 - "GET /pets/ HTTP/1.1" 200 OK
