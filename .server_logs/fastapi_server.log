@@ -130,3 +130,24 @@ INFO:     100.64.4.167:47110 - "GET /pets/ HTTP/1.1" 200 OK
 INFO:     100.64.4.167:47120 - "GET /users/me HTTP/1.1" 200 OK
 INFO:     100.64.4.167:47132 - "GET /pets/ HTTP/1.1" 200 OK
 INFO:     100.64.4.167:46208 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     172.17.0.1:0 - "GET /main.9eb90fbbec2f92b605d4.hot-update.json HTTP/1.1" 404 Not Found
+INFO:     100.64.4.167:36978 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:36974 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:36988 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:37004 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:38266 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:38272 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:38288 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:38296 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:38308 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:38314 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:38322 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:38328 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:44832 - "OPTIONS /pets/2 HTTP/1.1" 200 OK
+INFO:     100.64.4.167:44834 - "DELETE /pets/2 HTTP/1.1" 200 OK
+INFO:     100.64.4.167:44496 - "OPTIONS /pets/ HTTP/1.1" 200 OK
+INFO:     Incoming pet create request fields: name=Chicu, species=Cat, breed=Persian, age=2.0, description=white fluzzy ball, location_lat=23.45, location_lng=-123.44, files=['d4.jpg']
+WARNING:  File in upload is not an UploadFile instance.
+INFO:     100.64.4.167:44498 - "POST /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:44514 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:44528 - "GET /pets/ HTTP/1.1" 200 OK
