@@ -50,3 +50,16 @@ INFO:     100.64.4.167:54784 - "GET /users/me HTTP/1.1" 200 OK
 INFO:     100.64.4.167:54796 - "GET /pets/ HTTP/1.1" 200 OK
 INFO:     100.64.4.167:54800 - "GET /pets/ HTTP/1.1" 200 OK
 INFO:     100.64.4.167:39624 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     172.17.0.1:0 - "GET /main.fa393bfc77a9a712e9b4.hot-update.json HTTP/1.1" 404 Not Found
+INFO:     100.64.4.167:41374 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:41366 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:41390 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:41400 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:41414 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:41428 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:41434 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:41450 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:52222 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:52230 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:52242 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:52244 - "GET /pets/ HTTP/1.1" 200 OK
