@@ -311,3 +311,17 @@ INFO:     100.64.4.167:50364 - "GET /pets/mock2 HTTP/1.1" 422 Unprocessable Enti
 INFO:     100.64.4.167:50372 - "GET /users/me HTTP/1.1" 200 OK
 INFO:     100.64.4.167:50382 - "GET /pets/mock2 HTTP/1.1" 422 Unprocessable Entity
 INFO:     100.64.4.167:50388 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:40938 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:44540 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:44556 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:44564 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:44566 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:44572 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:44588 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:44590 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:44598 - "GET /pets/mock2 HTTP/1.1" 422 Unprocessable Entity
+INFO:     100.64.4.167:44612 - "GET /pets/mock2 HTTP/1.1" 422 Unprocessable Entity
+INFO:     100.64.4.167:44614 - "GET /pets/mock2 HTTP/1.1" 422 Unprocessable Entity
+INFO:     100.64.4.167:44616 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:44620 - "GET /pets/mock2 HTTP/1.1" 422 Unprocessable Entity
+INFO:     100.64.4.167:44636 - "GET /users/me HTTP/1.1" 200 OK
