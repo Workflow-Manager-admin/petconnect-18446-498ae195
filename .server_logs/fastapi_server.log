@@ -1,23 +1,28 @@
 /home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/pydantic/_internal/_config.py:373: UserWarning: Valid config keys have changed in V2:
 * 'orm_mode' has been renamed to 'from_attributes'
   warnings.warn(message, UserWarning)
-INFO:     Started server process [21762]
+INFO:     Started server process [525]
 INFO:     Waiting for application startup.
+(trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/kavia/workspace/code-generation/petconnect-18446-498ae195/fastapi_backend/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:3001 (Press CTRL+C to quit)
-INFO:     100.64.4.167:43398 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:43404 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:43408 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:53508 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:53510 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:53520 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     172.17.0.1:0 - "GET /main.c038d33dc267e3dfcb9c.hot-update.json HTTP/1.1" 404 Not Found
-INFO:     100.64.4.167:51426 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:51436 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     172.17.0.1:0 - "GET /main.cd0b9a64beb18eceaffb.hot-update.json HTTP/1.1" 404 Not Found
-INFO:     100.64.4.167:59870 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:59882 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:59898 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:59914 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:59930 - "GET /users/me HTTP/1.1" 200 OK
-INFO:     100.64.4.167:59934 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:49196 - "HEAD /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:49188 - "HEAD /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:49222 - "HEAD /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:49212 - "HEAD /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:49244 - "HEAD /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:49238 - "HEAD /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:60126 - "GET /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:60136 - "GET /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:60138 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     100.64.4.167:60148 - "HEAD /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:60162 - "HEAD /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:60168 - "GET /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:60180 - "GET /docs HTTP/1.1" 200 OK
+INFO:     100.64.4.167:60192 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     100.64.4.167:60202 - "GET /openapi.json HTTP/1.1" 200 OK
