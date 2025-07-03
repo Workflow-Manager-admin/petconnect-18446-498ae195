@@ -63,3 +63,22 @@ INFO:     100.64.4.167:52222 - "GET /users/me HTTP/1.1" 200 OK
 INFO:     100.64.4.167:52230 - "GET /users/me HTTP/1.1" 200 OK
 INFO:     100.64.4.167:52242 - "GET /pets/ HTTP/1.1" 200 OK
 INFO:     100.64.4.167:52244 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     172.17.0.1:0 - "GET /main.7179187fd4d9c2cd5ea4.hot-update.json HTTP/1.1" 404 Not Found
+INFO:     100.64.4.167:42340 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:42344 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:42352 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:42364 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:42378 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:42394 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:42402 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:42406 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:53612 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:53622 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:39316 - "OPTIONS /pets/ HTTP/1.1" 200 OK
+INFO:     Incoming pet create request fields: name=Chicu, species=Dog, breed=Pomerian, age=3.0, description=white ball, lovely and friendly, location_lat=23.554, location_lng=-32.65, files=['d1.jpg']
+WARNING:  File in upload is not an UploadFile instance.
+INFO:     100.64.4.167:39320 - "POST /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:39332 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:39346 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:51696 - "OPTIONS /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:51702 - "GET /pets/ HTTP/1.1" 200 OK
