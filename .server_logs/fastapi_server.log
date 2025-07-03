@@ -151,3 +151,23 @@ WARNING:  File in upload is not an UploadFile instance.
 INFO:     100.64.4.167:44498 - "POST /pets/ HTTP/1.1" 200 OK
 INFO:     100.64.4.167:44514 - "GET /pets/ HTTP/1.1" 200 OK
 INFO:     100.64.4.167:44528 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:43044 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:43046 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:43052 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:43060 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:54776 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:45232 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:45246 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:45250 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:48384 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:48392 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:48400 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:48410 - "GET /users/me HTTP/1.1" 200 OK
+INFO:     100.64.4.167:48424 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     Incoming pet create request fields: name=Chibi, species=Dog, breed=Pomerian, age=1.0, description=cvnskdl asnd al dnaj, location_lat=23.45, location_lng=-239.03, files=['d1.jpg', 'd2.jpg']
+WARNING:  File in upload is not an UploadFile instance.
+WARNING:  File in upload is not an UploadFile instance.
+INFO:     100.64.4.167:54410 - "POST /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:54422 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:54426 - "GET /pets/ HTTP/1.1" 200 OK
+INFO:     100.64.4.167:54212 - "GET /pets/ HTTP/1.1" 200 OK
